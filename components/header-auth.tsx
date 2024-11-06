@@ -31,9 +31,6 @@ export default async function AuthButton() {
       <Button component={Link} href="/sign-in" size="sm" variant={"outline"}>
         Sign in
       </Button>
-      <Button component={Link} href="/sign-up" size="sm" >
-        Sign up
-      </Button>
     </div>
   );
 }
