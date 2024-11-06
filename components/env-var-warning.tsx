@@ -1,31 +1,35 @@
 import Link from "next/link";
-import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
+import {Badge, Button} from "@mantine/core";
 
 export function EnvVarWarning() {
   return (
     <div className="flex gap-4 items-center">
-      <Badge variant={"outline"} className="font-normal">
+      <Badge variant={"outline"} className="font-normal"
+          color={'red'}
+      >
         Supabase environment variables required
       </Badge>
       <div className="flex gap-2">
         <Button
-          asChild
           size="sm"
           variant={"outline"}
+          component={Link}
           disabled
           className="opacity-75 cursor-none pointer-events-none"
+              href="/sign-in"
         >
-          <Link href="/sign-in">Sign in</Link>
+
+              Sign in
         </Button>
         <Button
-          asChild
           size="sm"
           variant={"default"}
           disabled
+          component={Link}
           className="opacity-75 cursor-none pointer-events-none"
+              href="/sign-up"
         >
-          <Link href="/sign-up">Sign up</Link>
+          Sign up
         </Button>
       </div>
     </div>
