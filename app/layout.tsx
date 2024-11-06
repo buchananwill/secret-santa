@@ -11,8 +11,8 @@ import "./globals.css";
 import {ColorSchemeScript, createTheme, MantineProvider} from "@mantine/core";
 import {Head} from "next/document";
 
-const defaultUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
+const defaultUrl = process.env.ROOT_URL
+    ? `${process.env.ROOT_URL}`
     : "http://localhost:3000";
 
 export const metadata = {
