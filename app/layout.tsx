@@ -30,12 +30,12 @@ export default function RootLayout({
         <html lang="en" className={GeistSans.className} suppressHydrationWarning>
         <head><title>Secret Santa</title><ColorSchemeScript /></head>
         <body className="bg-background text-foreground">
-        {/*<ThemeProvider*/}
-        {/*  attribute="class"*/}
-        {/*  defaultTheme="system"*/}
-        {/*  enableSystem*/}
-        {/*  disableTransitionOnChange*/}
-        {/*>*/}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
         <MantineProvider theme={theme}>
             <main className="min-h-screen flex flex-col items-center">
                 <div className="flex-1 w-full flex flex-col gap-20 items-center">
@@ -72,7 +72,7 @@ export default function RootLayout({
                 </div>
             </main>
         </MantineProvider>
-        {/*</ThemeProvider>*/}
+        </ThemeProvider>
         </body>
         </html>
     );

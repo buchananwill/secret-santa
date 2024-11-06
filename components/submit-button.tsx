@@ -1,10 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { type ComponentProps } from "react";
-import { useFormStatus } from "react-dom";
+import {useFormStatus} from "react-dom";
+import {BoxComponentProps, BoxProps, Button, ButtonProps} from "@mantine/core";
 
-type Props = ComponentProps<typeof Button> & {
+type Props = ButtonProps & BoxProps & BoxComponentProps & {
   pendingText?: string;
 };
 
