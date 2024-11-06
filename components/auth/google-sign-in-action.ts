@@ -4,7 +4,7 @@ import {createClient} from "@/utils/supabase/server";
 import {redirect} from "next/navigation";
 
 
-const rootUrl = process.env.ROOT_URL;
+const rootUrl = process.env.NEXT_PUBLIC_ROOT_URL;
 
 export async function googleSignInAction() {
     const supabaseClient = await createClient();
