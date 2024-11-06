@@ -3,7 +3,6 @@ import Link from "next/link";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {SubmitButton} from "@/components/submit-button";
-import {signInAction} from "@/app/actions";
 
 export function BasicLogin(
     {searchParams}:

@@ -78,4 +78,17 @@ export default function RootLayout({
     );
 }
 
-const theme = createTheme({})
+const theme = createTheme({
+    defaultRadius: 'lg',
+    components: {
+        Card: {
+            defaultProps: { shadow: 'md' }
+        },
+        Popover: {
+            defaultProps: { shadow: 'md' }
+        },
+        Button: {
+            defaultProps: { radius: 'md' }
+        }
+    }
+})
