@@ -8,6 +8,7 @@ const RETRY_DELAY = 5000; // 5 seconds for debounced retry
 
 export async function POST(request: NextRequest) {
     try {
+        console.log(JSON.stringify(request))
         await handleNotifications(0)
         return new Response(null, {status: 201})
     } catch (e) {
@@ -106,6 +107,3 @@ async function handleNotifications(retryCount = 0): Promise<void> {
         console.error('Error processing notifications:', error);
     }
 }
-
-// Start the notification handler
-handleNotifications().catch((err) => console.error('Unhandled error in notification handler:', err));
