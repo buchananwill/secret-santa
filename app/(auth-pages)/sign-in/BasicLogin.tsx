@@ -1,14 +1,19 @@
+'use client'
 import {FormMessage, Message} from "@/components/form-message";
 import Link from "next/link";
 import {Label} from "@/components/ui/label";
-import {Input} from "@/components/ui/input";
 import {SubmitButton} from "@/components/submit-button";
+import {PasswordInput, TextInput} from "@mantine/core";
+import {signInAction} from "@/app/(auth-pages)/actions";
 
 export function BasicLogin(
     {searchParams}:
         { searchParams: Message }
 ) {
-    return <form className="flex-1 flex flex-col min-w-64">
+    return <form className="flex-1 flex flex-col min-w-64" onSubmit={async (formEvent) => {
+        formEvent.preventDefault();
+        await signInAction(new FormData(formEvent.currentTarget))
+    } }>
         <h1 className="text-2xl font-medium">Sign in</h1>
         <p className="text-sm text-foreground">
             Don't have an account?{" "}
@@ -17,8 +22,7 @@ export function BasicLogin(
             </Link>
         </p>
         <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-            <Label htmlFor="email">Email</Label>
-            <Input name="email" placeholder="you@example.com" required/>
+            <TextInput name="email" placeholder="you@example.com" required/>
             <div className="flex justify-between items-center">
                 <Label htmlFor="password">Password</Label>
                 <Link
@@ -28,7 +32,7 @@ export function BasicLogin(
                     Forgot Password?
                 </Link>
             </div>
-            <Input
+            <PasswordInput
                 type="password"
                 name="password"
                 placeholder="Your password"

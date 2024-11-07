@@ -1,6 +1,6 @@
 'use client'
 import {Button} from "@mantine/core";
-import {resendTest} from "@/api/actions/resend";
+import {resend} from "@/api/actions/resend";
 
 export default function Page() {
 

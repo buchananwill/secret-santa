@@ -4,7 +4,7 @@ import {Button, Input, PasswordInput, TextInput} from "@mantine/core";
 import {FormMessage, Message} from "@/components/form-message";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useCallback} from "react";
-import {signUpAction} from "@/app/actions";
+import {signUpAction} from "@/app/(auth-pages)/actions";
 
 export type BasicSignUp = {
     email: string;

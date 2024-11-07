@@ -1,6 +1,6 @@
 import { PrismaClient, Prisma, elf_mail } from '@prisma/client';
 import {NextRequest} from "next/server";
-import {resendTest} from "@/api/actions/resend";
+import {resend} from "@/api/actions/resend";
 
 const prisma = new PrismaClient();
 const MAX_BATCH_SIZE = 10;
@@ -68,7 +68,7 @@ async function handleNotifications(retryCount = 0): Promise<void> {
             });
 
             // Step 2: Send notifications
-            const sendPromises = messages.map((message) => resendTest(message, userIdToEmailMap.get(message.recipient as string)));
+            const sendPromises = messages.map((message) => resend(message, userIdToEmailMap.get(message.recipient as string)));
 
             // Step 3: Await all promises and handle success/failure
             const results = await Promise.allSettled(sendPromises);

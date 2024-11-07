@@ -2,7 +2,7 @@
 import {Resend} from 'resend';
 import {elf_mail} from "@prisma/client";
 
-export async function resendTest(message: elf_mail, recipientEmail?: string) {
+export async function resend(message: elf_mail, recipientEmail?: string) {
     if (!message.recipient || !message.content || recipientEmail === undefined) {
         throw Error('Missing recipient or message')
     }
@@ -11,8 +11,8 @@ export async function resendTest(message: elf_mail, recipientEmail?: string) {
     return await resend.emails.send({
         from: 'Secret Santa <elves@shipbornsoftwaresolutions.co.uk>',
         to: [recipientEmail],
-        subject: 'You are winning',
-        html: `${message.content}`,
+        subject: 'You have elf-mail',
+        html: `<p>${message.content}</p><p><a href="${process.env.NEXT_PUBLIC_ROOT_URL}/elf-ville/elf-mail">Click Here to Reply - this email address cannot receive incoming mail.</a></p>`,
     });
 }
 
