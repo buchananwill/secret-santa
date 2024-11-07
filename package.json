@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "dlx prisma db pull && dlx prisma generate && next build",
+    "build": "prisma db pull && prisma generate && next build",
     "start": "next start"
   },
   "dependencies": {
