@@ -9,8 +9,8 @@ import "@mantine/core/styles.css";
 import "./globals.css";
 import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core";
 import { isSignedIn } from "@/utils/supabase/is-signed-in-action-ssr";
-import NavDrawer from "@/components/nav-drawer";
-import { LinkTree, root } from "@/components/nav-tree";
+import NavDrawer from "@/components/navigation/nav-drawer";
+import { LinkTree, root } from "@/components/navigation/nav-tree";
 
 const defaultUrl = process.env.ROOT_URL
   ? `${process.env.ROOT_URL}`
