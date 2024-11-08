@@ -4,6 +4,9 @@ import { useForm } from "react-hook-form";
 import { Button, NumberInput, Paper, TextInput } from "@mantine/core";
 import React, { useCallback } from "react";
 import { DateTimePicker, DateValue } from "@mantine/dates";
+import { createClient } from "@/utils/supabase/client";
+
+const client = createClient();
 
 export default function CreateSecretSantaCircle() {
   const { handleSubmit, register, watch, setValue, trigger } =
@@ -31,6 +34,12 @@ export default function CreateSecretSantaCircle() {
     [setValue, trigger],
   );
 
+  const onSubmit = useCallback(async (data: secret_santa_circles) => {
+    let response = await client.from("secret_santa_circles").insert(data);
+    // TODO HANDLE RESPONSE
+    console.log(response);
+  }, []);
+
   return (
     <Paper
       component={"form"}
@@ -43,6 +52,7 @@ export default function CreateSecretSantaCircle() {
           gap: "1em",
         },
       }}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <TextInput {...register("name")} label={"Circle Name"} />
       <NumberInput
