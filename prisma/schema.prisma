@@ -281,47 +281,49 @@ model sso_providers {
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 /// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
 model users {
-  instance_id                         String?           @db.Uuid
-  id                                  String            @id @db.Uuid
-  aud                                 String?           @db.VarChar(255)
-  role                                String?           @db.VarChar(255)
-  email                               String?           @db.VarChar(255)
-  encrypted_password                  String?           @db.VarChar(255)
-  email_confirmed_at                  DateTime?         @db.Timestamptz(6)
-  invited_at                          DateTime?         @db.Timestamptz(6)
-  confirmation_token                  String?           @db.VarChar(255)
-  confirmation_sent_at                DateTime?         @db.Timestamptz(6)
-  recovery_token                      String?           @db.VarChar(255)
-  recovery_sent_at                    DateTime?         @db.Timestamptz(6)
-  email_change_token_new              String?           @db.VarChar(255)
-  email_change                        String?           @db.VarChar(255)
-  email_change_sent_at                DateTime?         @db.Timestamptz(6)
-  last_sign_in_at                     DateTime?         @db.Timestamptz(6)
+  instance_id                         String?                @db.Uuid
+  id                                  String                 @id @db.Uuid
+  aud                                 String?                @db.VarChar(255)
+  role                                String?                @db.VarChar(255)
+  email                               String?                @db.VarChar(255)
+  encrypted_password                  String?                @db.VarChar(255)
+  email_confirmed_at                  DateTime?              @db.Timestamptz(6)
+  invited_at                          DateTime?              @db.Timestamptz(6)
+  confirmation_token                  String?                @db.VarChar(255)
+  confirmation_sent_at                DateTime?              @db.Timestamptz(6)
+  recovery_token                      String?                @db.VarChar(255)
+  recovery_sent_at                    DateTime?              @db.Timestamptz(6)
+  email_change_token_new              String?                @db.VarChar(255)
+  email_change                        String?                @db.VarChar(255)
+  email_change_sent_at                DateTime?              @db.Timestamptz(6)
+  last_sign_in_at                     DateTime?              @db.Timestamptz(6)
   raw_app_meta_data                   Json?
   raw_user_meta_data                  Json?
   is_super_admin                      Boolean?
-  created_at                          DateTime?         @db.Timestamptz(6)
-  updated_at                          DateTime?         @db.Timestamptz(6)
-  phone                               String?           @unique
-  phone_confirmed_at                  DateTime?         @db.Timestamptz(6)
-  phone_change                        String?           @default("")
-  phone_change_token                  String?           @default("") @db.VarChar(255)
-  phone_change_sent_at                DateTime?         @db.Timestamptz(6)
-  confirmed_at                        DateTime?         @default(dbgenerated("LEAST(email_confirmed_at, phone_confirmed_at)")) @db.Timestamptz(6)
-  email_change_token_current          String?           @default("") @db.VarChar(255)
-  email_change_confirm_status         Int?              @default(0) @db.SmallInt
-  banned_until                        DateTime?         @db.Timestamptz(6)
-  reauthentication_token              String?           @default("") @db.VarChar(255)
-  reauthentication_sent_at            DateTime?         @db.Timestamptz(6)
-  is_sso_user                         Boolean           @default(false)
-  deleted_at                          DateTime?         @db.Timestamptz(6)
-  is_anonymous                        Boolean           @default(false)
+  created_at                          DateTime?              @db.Timestamptz(6)
+  updated_at                          DateTime?              @db.Timestamptz(6)
+  phone                               String?                @unique
+  phone_confirmed_at                  DateTime?              @db.Timestamptz(6)
+  phone_change                        String?                @default("")
+  phone_change_token                  String?                @default("") @db.VarChar(255)
+  phone_change_sent_at                DateTime?              @db.Timestamptz(6)
+  confirmed_at                        DateTime?              @default(dbgenerated("LEAST(email_confirmed_at, phone_confirmed_at)")) @db.Timestamptz(6)
+  email_change_token_current          String?                @default("") @db.VarChar(255)
+  email_change_confirm_status         Int?                   @default(0) @db.SmallInt
+  banned_until                        DateTime?              @db.Timestamptz(6)
+  reauthentication_token              String?                @default("") @db.VarChar(255)
+  reauthentication_sent_at            DateTime?              @db.Timestamptz(6)
+  is_sso_user                         Boolean                @default(false)
+  deleted_at                          DateTime?              @db.Timestamptz(6)
+  is_anonymous                        Boolean                @default(false)
   identities                          identities[]
   mfa_factors                         mfa_factors[]
   one_time_tokens                     one_time_tokens[]
   sessions                            sessions[]
-  elf_mail_elf_mail_created_byTousers elf_mail[]        @relation("elf_mail_created_byTousers")
-  elf_mail_elf_mail_recipientTousers  elf_mail[]        @relation("elf_mail_recipientTousers")
+  elf_mail_elf_mail_created_byTousers elf_mail[]             @relation("elf_mail_created_byTousers")
+  elf_mail_elf_mail_recipientTousers  elf_mail[]             @relation("elf_mail_recipientTousers")
+  elf_profiles                        elf_profiles?
+  secret_santa_circles                secret_santa_circles[]
 
   @@index([instance_id])
   @@index([is_anonymous])
@@ -350,6 +352,66 @@ model message_notification_status {
   id       BigInt     @id @default(autoincrement())
   status   String     @unique @db.VarChar
   elf_mail elf_mail[]
+
+  @@schema("public")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model circle_status {
+  id                   BigInt                 @id @default(autoincrement())
+  circle_status        String                 @unique
+  secret_santa_circles secret_santa_circles[]
+
+  @@schema("public")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model elf_profiles {
+  id                                                         String          @id @default(dbgenerated("auth.uid()")) @db.Uuid
+  created_at                                                 DateTime        @default(now()) @db.Timestamptz(6)
+  st_nick_name                                               String          @unique
+  partner                                                    String?         @unique @db.Uuid
+  users                                                      users           @relation(fields: [id], references: [id])
+  elf_profiles                                               elf_profiles?   @relation("elf_profilesToelf_profiles", fields: [partner], references: [id], onDelete: Cascade)
+  other_elf_profiles                                         elf_profiles?   @relation("elf_profilesToelf_profiles")
+  secret_santas_secret_santas_acts_as_elf_fromToelf_profiles secret_santas[] @relation("secret_santas_acts_as_elf_fromToelf_profiles")
+  secret_santas_secret_santas_acts_as_santa_toToelf_profiles secret_santas[] @relation("secret_santas_acts_as_santa_toToelf_profiles")
+  secret_santas_secret_santas_idToelf_profiles               secret_santas?  @relation("secret_santas_idToelf_profiles")
+
+  @@schema("public")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model secret_santa_circles {
+  id            BigInt          @id @default(autoincrement())
+  created_at    DateTime        @default(now()) @db.Timestamptz(6)
+  owner         String?         @default(dbgenerated("auth.uid()")) @db.Uuid
+  name          String          @unique
+  spend_limit   Int?            @default(20) @db.SmallInt
+  status        BigInt          @default(1)
+  delivery_day  DateTime?       @db.Timestamptz(6)
+  users         users?          @relation(fields: [owner], references: [id], onDelete: Cascade)
+  circle_status circle_status   @relation(fields: [status], references: [id], onDelete: Cascade)
+  secret_santas secret_santas[]
+
+  @@schema("public")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model secret_santas {
+  id                                                        String               @id @default(dbgenerated("auth.uid()")) @db.Uuid
+  created_at                                                DateTime             @default(now()) @db.Timestamptz(6)
+  secret_santa_circle                                       BigInt
+  acts_as_santa_to                                          String?              @db.Uuid
+  acts_as_elf_from                                          String?              @db.Uuid
+  elf_profiles_secret_santas_acts_as_elf_fromToelf_profiles elf_profiles?        @relation("secret_santas_acts_as_elf_fromToelf_profiles", fields: [acts_as_elf_from], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  elf_profiles_secret_santas_acts_as_santa_toToelf_profiles elf_profiles?        @relation("secret_santas_acts_as_santa_toToelf_profiles", fields: [acts_as_santa_to], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  elf_profiles_secret_santas_idToelf_profiles               elf_profiles         @relation("secret_santas_idToelf_profiles", fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  secret_santa_circles                                      secret_santa_circles @relation(fields: [secret_santa_circle], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@schema("public")
 }

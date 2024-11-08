@@ -4,7 +4,6 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import { hasEnvVars } from "@/utils/supabase/check-env-vars";
 import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "next-themes";
-import Link from "next/link";
 import "@mantine/core/styles.css";
 import "./globals.css";
 import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core";
@@ -84,6 +83,9 @@ export default async function RootLayout({
 const theme = createTheme({
   defaultRadius: "lg",
   components: {
+    Paper: {
+      defaultProps: { shadow: "md" },
+    },
     Card: {
       defaultProps: { shadow: "md" },
     },

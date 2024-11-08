@@ -20,6 +20,10 @@ export const root: NavNode = {
           pathSegment: "elf-mail",
           text: "Elf Mail",
         },
+        {
+          pathSegment: "secret-santa-circles",
+          text: "Secret Santa Circles",
+        },
       ],
     },
   ],
