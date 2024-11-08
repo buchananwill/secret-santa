@@ -1,5 +1,7 @@
-import CreateElfProfile from "@/components/forms/elf-profiles/create-elf-profile";
+import EditElfProfile from "@/components/forms/elf-profiles/edit-elf-profile";
+import { fetchProfileAction } from "@/app/elf-ville/elf-profile/fetch-profile-action";
 
 export default async function Page() {
-  return <CreateElfProfile />;
+  let profile = await fetchProfileAction();
+  return profile && <EditElfProfile profile={profile} />;
 }
