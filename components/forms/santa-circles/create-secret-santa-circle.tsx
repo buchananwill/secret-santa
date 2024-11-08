@@ -6,6 +6,8 @@ import React, { useCallback } from "react";
 import { DateTimePicker, DateValue } from "@mantine/dates";
 import { createClient } from "@/utils/supabase/client";
 import "./Form.css";
+import { motion } from "framer-motion";
+import { useQueryClient } from "@tanstack/react-query";
 
 const client = createClient();
 
@@ -14,6 +16,7 @@ export default function CreateSecretSantaCircle() {
     useForm<secret_santa_circles>();
 
   const deliveryDay = watch("delivery_day");
+  let queryClient = useQueryClient();
 
   const handleDateTimeChange = useCallback(
     (value: DateValue) => {
@@ -35,43 +38,39 @@ export default function CreateSecretSantaCircle() {
     [setValue, trigger],
   );
 
-  const onSubmit = useCallback(async (data: secret_santa_circles) => {
-    let response = await client.from("secret_santa_circles").insert(data);
-    // TODO HANDLE RESPONSE
-    console.log(response);
-  }, []);
+  const onSubmit = useCallback(
+    async (data: secret_santa_circles) => {
+      let response = await client.from("secret_santa_circles").insert(data);
+      queryClient.invalidateQueries({
+        queryKey: ["secret_santa_circles", "all"],
+      });
+      // TODO HANDLE RESPONSE
+      console.log(response);
+    },
+    [queryClient],
+  );
 
   return (
-    <Paper
-      component={"form"}
-      className={"flex-form"}
-      // classNames={{ root: "flex-form" }}
-      // styles={{
-      //   root: {
-      //     alignItems: "center",
-      //     display: "flex",
-      //     flexDirection: "column",
-      //     gap: "1em",
-      //   },
-      // }}
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <TextInput {...register("name")} label={"Circle Name"} />
-      <NumberInput
-        label={"Spend Limit"}
-        onChange={handleSpendLimitChange}
-        min={0}
-        prefix={"£ "}
-        thousandSeparator={" "}
-        defaultValue={20}
-        classNames={{ input: "text-right pr-8" }}
-      />
-      <DateTimePicker
-        onChange={handleDateTimeChange}
-        value={deliveryDay}
-        label={"Delivery Day"}
-      />
-      <Button type={"submit"}>Create Circle</Button>
+    <Paper component={motion.div} layoutId={"create-circle"}>
+      <form className={"flex-form"} onSubmit={handleSubmit(onSubmit)}>
+        <TextInput {...register("name")} label={"Circle Name"} />
+        <NumberInput
+          label={"Spend Limit"}
+          onChange={handleSpendLimitChange}
+          min={0}
+          max={32767}
+          prefix={"£ "}
+          thousandSeparator={" "}
+          defaultValue={20}
+          classNames={{ input: "text-right pr-8" }}
+        />
+        <DateTimePicker
+          onChange={handleDateTimeChange}
+          value={deliveryDay}
+          label={"Delivery Day"}
+        />
+        <Button type={"submit"}>Create Circle</Button>
+      </form>
     </Paper>
   );
 }

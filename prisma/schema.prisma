@@ -369,16 +369,14 @@ model circle_status {
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model elf_profiles {
-  id                                                         String          @id @default(dbgenerated("auth.uid()")) @db.Uuid
-  created_at                                                 DateTime        @default(now()) @db.Timestamptz(6)
-  st_nick_name                                               String          @unique
-  partner                                                    String?         @unique @db.Uuid
-  users                                                      users           @relation(fields: [id], references: [id])
-  elf_profiles                                               elf_profiles?   @relation("elf_profilesToelf_profiles", fields: [partner], references: [id], onDelete: Cascade)
-  other_elf_profiles                                         elf_profiles?   @relation("elf_profilesToelf_profiles")
-  secret_santas_secret_santas_acts_as_elf_fromToelf_profiles secret_santas[] @relation("secret_santas_acts_as_elf_fromToelf_profiles")
-  secret_santas_secret_santas_acts_as_santa_toToelf_profiles secret_santas[] @relation("secret_santas_acts_as_santa_toToelf_profiles")
-  secret_santas_secret_santas_idToelf_profiles               secret_santas?  @relation("secret_santas_idToelf_profiles")
+  id                 String          @id @default(dbgenerated("auth.uid()")) @db.Uuid
+  created_at         DateTime        @default(now()) @db.Timestamptz(6)
+  st_nick_name       String          @unique
+  partner            String?         @unique @db.Uuid
+  users              users           @relation(fields: [id], references: [id])
+  elf_profiles       elf_profiles?   @relation("elf_profilesToelf_profiles", fields: [partner], references: [id])
+  other_elf_profiles elf_profiles?   @relation("elf_profilesToelf_profiles")
+  secret_santas      secret_santas[]
 
   @@schema("public")
 }
@@ -403,16 +401,18 @@ model secret_santa_circles {
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model secret_santas {
-  id                                                        String               @id @default(dbgenerated("auth.uid()")) @db.Uuid
-  created_at                                                DateTime             @default(now()) @db.Timestamptz(6)
-  secret_santa_circle                                       BigInt
-  acts_as_santa_to                                          String?              @db.Uuid
-  acts_as_elf_from                                          String?              @db.Uuid
-  elf_profiles_secret_santas_acts_as_elf_fromToelf_profiles elf_profiles?        @relation("secret_santas_acts_as_elf_fromToelf_profiles", fields: [acts_as_elf_from], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  elf_profiles_secret_santas_acts_as_santa_toToelf_profiles elf_profiles?        @relation("secret_santas_acts_as_santa_toToelf_profiles", fields: [acts_as_santa_to], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  elf_profiles_secret_santas_idToelf_profiles               elf_profiles         @relation("secret_santas_idToelf_profiles", fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  secret_santa_circles                                      secret_santa_circles @relation(fields: [secret_santa_circle], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user_id                                                    String               @default(dbgenerated("auth.uid()")) @db.Uuid
+  created_at                                                 DateTime             @default(now()) @db.Timestamptz(6)
+  secret_santa_circle                                        BigInt
+  id                                                         BigInt               @id @default(autoincrement())
+  acts_as_santa_to                                           BigInt?
+  is_ready                                                   Boolean              @default(false)
+  elf_profiles_secret_santas_acts_as_santa_toToelf_profiles  secret_santas?       @relation("secret_santas_acts_as_santa_toToelf_profiles", fields: [acts_as_santa_to], references: [id])
+  secret_santas_secret_santas_acts_as_santa_toToelf_profiles secret_santas[]      @relation("secret_santas_acts_as_santa_toToelf_profiles")
+  elf_profiles                                               elf_profiles         @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "secret_santas_id_fkey")
+  secret_santa_circles                                       secret_santa_circles @relation(fields: [secret_santa_circle], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
+  @@unique([user_id, secret_santa_circle], map: "user_once_per_circle_constraint")
   @@schema("public")
 }
 
