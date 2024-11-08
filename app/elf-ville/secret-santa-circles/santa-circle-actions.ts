@@ -3,6 +3,7 @@
 import { withUser } from "@/utils/supabase/with-user";
 import prismaClient from "@/app/elf-ville/elf-mail/prisma-client";
 import { secret_santa_circles, secret_santas } from "@prisma/client";
+import { NextResponse } from "next/server";
 
 export async function fetchCircleMemberships() {
   return withUser((user) => {
@@ -90,5 +91,34 @@ export async function announceReady(circleId: bigint) {
       },
       data: { is_ready: true },
     });
+  });
+}
+
+//TODO: run this with transactional lock
+export async function tryToPerformMatching(circleId: bigint) {
+  return withUser(async (user) => {
+    let circle = await prismaClient.secret_santa_circles.findUnique({
+      where: {
+        id: circleId,
+      },
+    });
+    if (!circle || circle?.status > 1)
+      return new Response(null, { status: 400 });
+
+    let secretSantas = await prismaClient.secret_santas.findMany({
+      where: {
+        secret_santa_circle: circleId,
+      },
+    });
+    const allSantasReady = !secretSantas.some((santa) => !santa.is_ready);
+
+    if (allSantasReady) {
+      await prismaClient.secret_santa_circles.update({
+        where: { id: circleId },
+        data: { ...circle, status: 2 },
+      });
+    } else {
+      return new Response(JSON.stringify({ isReady: false }), { status: 200 });
+    }
   });
 }
