@@ -69,4 +69,17 @@
   body {
     @apply bg-background text-foreground;
   }
+
 }
+
+@layer utilities {
+  .flex-form {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: var(--mantine-spacing-md);
+  }
+}
+
+

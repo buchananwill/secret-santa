@@ -17,6 +17,10 @@ export const root: NavNode = {
       text: "Elf Ville",
       children: [
         {
+          pathSegment: "elf-profile",
+          text: "Elf Profile",
+        },
+        {
           pathSegment: "elf-mail",
           text: "Elf Mail",
         },

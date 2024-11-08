@@ -5,6 +5,7 @@ import { Button, NumberInput, Paper, TextInput } from "@mantine/core";
 import React, { useCallback } from "react";
 import { DateTimePicker, DateValue } from "@mantine/dates";
 import { createClient } from "@/utils/supabase/client";
+import "./Form.css";
 
 const client = createClient();
 
@@ -43,15 +44,16 @@ export default function CreateSecretSantaCircle() {
   return (
     <Paper
       component={"form"}
-      p={"md"}
-      styles={{
-        root: {
-          alignItems: "center",
-          display: "flex",
-          flexDirection: "column",
-          gap: "1em",
-        },
-      }}
+      className={"flex-form"}
+      // classNames={{ root: "flex-form" }}
+      // styles={{
+      //   root: {
+      //     alignItems: "center",
+      //     display: "flex",
+      //     flexDirection: "column",
+      //     gap: "1em",
+      //   },
+      // }}
       onSubmit={handleSubmit(onSubmit)}
     >
       <TextInput {...register("name")} label={"Circle Name"} />
