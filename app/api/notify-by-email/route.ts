@@ -1,7 +1,7 @@
 import { PrismaClient, Prisma, elf_mail } from "@prisma/client";
 import { NextRequest } from "next/server";
 import { resend } from "@/api/actions/resend";
-import { prismaClient } from "@/app/elf-ville/elf-mail/prisma-client";
+import prismaClient from "@/app/elf-ville/elf-mail/prisma-client";
 
 const MAX_BATCH_SIZE = 10;
 const RETRY_DELAY = 5000; // 5 seconds for debounced retry
