@@ -1,7 +1,7 @@
 "use server";
 
 import { withUser } from "@/utils/supabase/with-user";
-import prismaClient from "@/app/elf-ville/elf-mail/prisma-client";
+import prismaClient from "@/api/prisma-client";
 import { secret_santas } from "@prisma/client";
 
 export async function fetchCircleMemberships() {
@@ -90,5 +90,31 @@ export async function announceReady(circleId: bigint) {
       },
       data: { is_ready: true },
     });
+  });
+}
+
+export async function fetchSantaIdForElf(id: bigint | null) {
+  if (id === null) return null;
+  return prismaClient.secret_santas.findUnique({
+    where: {
+      acts_as_santa_to: id,
+    },
+    select: {
+      id: true,
+      user_id: true,
+    },
+  });
+}
+
+export async function fetchElfProfileFromSantaId(id: bigint | null) {
+  if (id === null) return null;
+  return prismaClient.secret_santas.findUnique({
+    where: {
+      id: id,
+    },
+    select: {
+      id: true,
+      user_id: true,
+    },
   });
 }

@@ -339,7 +339,9 @@ model elf_mail {
   content                          String?
   recipient                        String?                      @db.Uuid
   notification_status              BigInt?                      @default(1)
+  santa_circle_context             BigInt?
   message_notification_status      message_notification_status? @relation(fields: [notification_status], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  secret_santa_circles             secret_santa_circles?        @relation(fields: [santa_circle_context], references: [id], onUpdate: NoAction)
   users_elf_mail_created_byTousers users                        @relation("elf_mail_created_byTousers", fields: [created_by], references: [id], onDelete: Cascade, map: "test_messages_created_by_fkey")
   users_elf_mail_recipientTousers  users?                       @relation("elf_mail_recipientTousers", fields: [recipient], references: [id], onDelete: NoAction, map: "test_messages_recipient_fkey")
 
@@ -391,6 +393,7 @@ model secret_santa_circles {
   spend_limit   Int?            @default(20) @db.SmallInt
   status        BigInt          @default(1)
   delivery_day  DateTime?       @db.Timestamptz(6)
+  elf_mail      elf_mail[]
   users         users?          @relation(fields: [owner], references: [id], onDelete: Cascade)
   circle_status circle_status   @relation(fields: [status], references: [id], onDelete: Cascade)
   secret_santas secret_santas[]
@@ -405,10 +408,10 @@ model secret_santas {
   created_at                                                 DateTime             @default(now()) @db.Timestamptz(6)
   secret_santa_circle                                        BigInt
   id                                                         BigInt               @id @default(autoincrement())
-  acts_as_santa_to                                           BigInt?
+  acts_as_santa_to                                           BigInt?              @unique
   is_ready                                                   Boolean              @default(false)
   elf_profiles_secret_santas_acts_as_santa_toToelf_profiles  secret_santas?       @relation("secret_santas_acts_as_santa_toToelf_profiles", fields: [acts_as_santa_to], references: [id])
-  secret_santas_secret_santas_acts_as_santa_toToelf_profiles secret_santas[]      @relation("secret_santas_acts_as_santa_toToelf_profiles")
+  secret_santas_secret_santas_acts_as_santa_toToelf_profiles secret_santas?       @relation("secret_santas_acts_as_santa_toToelf_profiles")
   elf_profiles                                               elf_profiles         @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "secret_santas_id_fkey")
   secret_santa_circles                                       secret_santa_circles @relation(fields: [secret_santa_circle], references: [id], onDelete: NoAction, onUpdate: NoAction)
 

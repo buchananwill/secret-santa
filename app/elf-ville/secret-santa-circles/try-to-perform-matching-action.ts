@@ -1,7 +1,7 @@
 "use server";
 //TODO: run this with transactional lock
 import { withUser } from "@/utils/supabase/with-user";
-import prismaClient from "@/app/elf-ville/elf-mail/prisma-client";
+import prismaClient from "@/api/prisma-client";
 import { elf_profiles, secret_santas } from "@prisma/client";
 import { SecretSanta } from "@/utils/santa-matcher";
 import { matchElvesToSantas } from "@/utils/match-elves-to-santas";

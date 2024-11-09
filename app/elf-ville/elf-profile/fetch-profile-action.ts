@@ -1,6 +1,6 @@
 "use server";
 import { withUser } from "@/utils/supabase/with-user";
-import prismaClient from "@/app/elf-ville/elf-mail/prisma-client";
+import prismaClient from "@/api/prisma-client";
 
 export async function fetchProfileAction() {
   return withUser((user) => {
