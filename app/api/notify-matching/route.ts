@@ -74,14 +74,12 @@ export async function POST(request: NextRequest) {
             nextResponse = new NextResponse(null, { status: 201 });
           }
         }
+      } else {
+        nextResponse = new NextResponse(null, { status: 200 });
       }
     } else {
       nextResponse = new NextResponse(null, { status: 400 });
     }
-    await resendNotification(
-      { content: JSON.stringify(newVar), subject: "testing" },
-      "willwritescode@gmail.com",
-    );
     return nextResponse;
   });
 }
