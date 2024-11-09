@@ -5,11 +5,13 @@ import { hasEnvVars } from "@/utils/supabase/check-env-vars";
 import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "next-themes";
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 import "./globals.css";
 import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core";
 import { isSignedIn } from "@/utils/supabase/is-signed-in-action-ssr";
 import NavDrawer from "@/components/navigation/nav-drawer";
 import { LinkTree, root } from "@/components/navigation/nav-tree";
+import { Notifications } from "@mantine/notifications";
 
 const defaultUrl = process.env.ROOT_URL
   ? `${process.env.ROOT_URL}`
@@ -41,6 +43,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <MantineProvider theme={theme}>
+            <Notifications />
             <main className="min-h-screen flex flex-col items-center">
               <div className="flex-1 w-full flex flex-col gap-20 items-center">
                 <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">

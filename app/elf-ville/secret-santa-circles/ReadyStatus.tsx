@@ -4,10 +4,11 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   announceReady,
   fetchCircleMembership,
-  tryToPerformMatching,
 } from "@/app/elf-ville/secret-santa-circles/santa-circle-actions";
 import { Button } from "@mantine/core";
 import { useCallback, useTransition } from "react";
+import { tryToPerformMatching } from "@/app/elf-ville/secret-santa-circles/try-to-perform-matching-action";
+import { notifications } from "@mantine/notifications";
 
 export function ReadyStatus({
   santaCircle,
@@ -31,8 +32,12 @@ export function ReadyStatus({
       let prismaSecretSantasClient = await announceReady(santaCircle.id);
       console.log({ message: "now updated", prismaSecretSantasClient });
       await queryClient.invalidateQueries({ queryKey });
-      let response = await tryToPerformMatching(santaCircle.id);
-      console.log(response);
+      let { message, status } = await tryToPerformMatching(santaCircle.id);
+      notifications.show({
+        message,
+        id: "matching-outcome",
+        color: getStatusColor(status),
+      });
     });
   }, [santaCircle.id, startTransition, queryClient, queryKey]);
 
@@ -46,7 +51,24 @@ export function ReadyStatus({
       onClick={onClick}
       loading={isPending}
     >
-      Ready!
+      {userIsInCircle
+        ? secretSanta?.is_ready
+          ? "Ready!"
+          : "Ready?"
+        : "Join first."}
     </Button>
   );
+}
+
+const statusColors = {
+  "200": "blue",
+  "201": "green",
+  "400": "orange",
+  "500": "red",
+} as const;
+
+function getStatusColor(status: number) {
+  return String(status) in statusColors
+    ? statusColors[String(status) as keyof typeof statusColors]
+    : "red";
 }

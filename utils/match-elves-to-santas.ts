@@ -26,7 +26,10 @@ export function matchElvesToSantas(
   const santaSequence: SecretSanta[] = [];
   const failedSequences: SecretSanta[][] = [];
 
-  if (elves.length < 3) throw Error("Not enough elves to form a valid cycle.");
+  if (elves.length < 3) {
+    console.error("Not enough elves to form a valid cycle.");
+    return undefined;
+  }
 
   let loop = 0;
 
