@@ -63,7 +63,7 @@ const { setColorScheme } = useMantineColorScheme();
           value={theme}
           onValueChange={(e) => {
 setTheme(e)
-setColorScheme(e === 'system' ? 'auto' : e)
+setColorScheme(e === 'light' ? 'light' : e === 'dark' ? 'dark' : 'auto')
 }}
         >
           <DropdownMenuRadioItem className="flex gap-2" value="light">
