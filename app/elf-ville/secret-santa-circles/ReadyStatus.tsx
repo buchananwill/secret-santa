@@ -27,10 +27,8 @@ export function ReadyStatus({
   });
 
   const onClick = useCallback(() => {
-    console.log("CLICKED");
     startTransition(async () => {
       let prismaSecretSantasClient = await announceReady(santaCircle.id);
-      console.log({ message: "now updated", prismaSecretSantasClient });
       await queryClient.invalidateQueries({ queryKey });
       let { message, status } = await tryToPerformMatching(santaCircle.id);
       notifications.show({

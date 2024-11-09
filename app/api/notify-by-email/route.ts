@@ -8,7 +8,7 @@ const RETRY_DELAY = 5000; // 5 seconds for debounced retry
 
 export async function POST(request: NextRequest) {
   try {
-    console.log(JSON.stringify(request));
+    console.log(JSON.stringify(request)); // KEEP LOG
     await handleNotifications(0);
     return new Response(null, { status: 201 });
   } catch (e) {
@@ -37,7 +37,6 @@ async function handleNotifications(retryCount = 0): Promise<void> {
          FOR UPDATE SKIP LOCKED`;
 
       if (messages.length === 0) {
-        console.log("No pending messages found. Exiting.");
         return;
       }
 
@@ -79,7 +78,6 @@ async function handleNotifications(retryCount = 0): Promise<void> {
 
       results.forEach((result, index) => {
         if (result.status === "fulfilled") {
-          console.log(result.value.data);
           successIds.push(messages[index].id);
         } else {
           failureIds.push(messages[index].id);
@@ -103,7 +101,7 @@ async function handleNotifications(retryCount = 0): Promise<void> {
 
     // Step 5: Retry if there were failures
     if (failureIds.length > 0) {
-      console.log(`Retrying for failed messages in ${RETRY_DELAY}ms...`);
+      console.log(`Retrying for failed messages in ${RETRY_DELAY}ms...`); // KEEP LOG
       setTimeout(() => handleNotifications(retryCount + 1), RETRY_DELAY);
     }
   } catch (error) {

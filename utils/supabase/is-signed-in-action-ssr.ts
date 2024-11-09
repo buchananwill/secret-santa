@@ -11,7 +11,7 @@ export async function isSignedIn() {
       return session.data.user ?? undefined;
     })
     .catch((e) => {
-      console.log(e);
+      console.error(e);
       return undefined;
     });
 }

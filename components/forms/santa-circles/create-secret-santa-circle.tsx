@@ -45,7 +45,6 @@ export default function CreateSecretSantaCircle() {
         queryKey: ["secret_santa_circles", "all"],
       });
       // TODO HANDLE RESPONSE
-      console.log(response);
     },
     [queryClient],
   );

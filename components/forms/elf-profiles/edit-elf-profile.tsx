@@ -17,14 +17,12 @@ export default function EditElfProfile({ profile }: { profile: elf_profiles }) {
 
   const onSubmit = useCallback(
     async (data: elf_profiles) => {
-      console.log(data);
       const response = await client
         .from("elf_profiles")
         .update(data)
         .eq("id", profile.id);
 
       // TODO: handle response
-      console.log(response);
     },
     [profile.id],
   );

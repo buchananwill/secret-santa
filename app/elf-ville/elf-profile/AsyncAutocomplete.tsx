@@ -46,7 +46,6 @@ export function AsyncAutocomplete<
 
         getAsyncData(query, abortController.current?.signal)
           .then((result) => {
-            console.log(result);
             setMasterList(result ?? []);
             setEmpty(result?.length === 0);
             abortController.current = undefined;

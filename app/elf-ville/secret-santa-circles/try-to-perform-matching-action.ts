@@ -66,7 +66,7 @@ export async function tryToPerformMatching(circleId: bigint) {
         });
         let santas = matchElvesToSantas(elvesList);
         if (!santas) {
-          console.log("elves did not match");
+          console.warn("elves did not match");
           await prismaClient.secret_santa_circles.update({
             where: { id: circleId },
             data: { ...circle, status: 1 },

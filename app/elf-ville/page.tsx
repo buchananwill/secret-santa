@@ -9,7 +9,6 @@ export default function Page() {
 
   useEffect(() => {
     let elvesToSantas = matchElvesToSantas(structuredClone(testElves));
-    console.log({ testElves, elvesToSantas });
     if (elvesToSantas) setElves(elvesToSantas);
   }, []);
 

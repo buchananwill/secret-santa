@@ -49,17 +49,19 @@ export default function SecretSantaCircle({
         onClick={async () => {
           if (data === false) {
             let response = await joinCircleAction(santaCircle.id);
-            console.log(response);
           } else {
             const response = await leaveCircleAction(santaCircle.id);
-            console.log(response);
           }
-          queryClient.invalidateQueries({
-            queryKey: ["userInCircle", santaCircle.id.toString()],
-          });
-          queryClient.invalidateQueries({
-            queryKey: ["secret_santa", santaCircle.id.toString()],
-          });
+          queryClient
+            .invalidateQueries({
+              queryKey: ["userInCircle", santaCircle.id.toString()],
+            })
+            .catch(console.error);
+          queryClient
+            .invalidateQueries({
+              queryKey: ["secret_santa", santaCircle.id.toString()],
+            })
+            .catch(console.error);
         }}
         loading={isPending || isFetching}
       >
