@@ -19,8 +19,8 @@ const defaultUrl = process.env.ROOT_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "Elfville Secret Santa Matcher",
+  description: "For elves who love a bit of mystery with their present giving.",
 };
 
 export default async function RootLayout({
@@ -64,7 +64,13 @@ export default async function RootLayout({
 
                 <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-4">
                   <p>
-                    Powered by <strong>Elves</strong>
+                    Powered by{" "}
+                    <a
+                      href={"https://en.wikipedia.org/wiki/Elf_(film)"}
+                      className={"font-bold"}
+                    >
+                      Elves
+                    </a>
                   </p>
                   <ThemeSwitcher />
                 </footer>
