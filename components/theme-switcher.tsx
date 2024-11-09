@@ -60,7 +60,7 @@ const { setColorScheme } = useMantineColorScheme();
           onValueChange={(e) => {
 setTheme(e)
 setColorScheme(e === 'system' ? 'auto' : e)
-}
+}}
         >
           <DropdownMenuRadioItem className="flex gap-2" value="light">
             <Sun size={ICON_SIZE} className="text-muted-foreground" />{" "}
