@@ -42,7 +42,7 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <MantineProvider theme={theme}>
+          <MantineProvider theme={theme} defaultColorScheme={"auto"}>
             <Notifications />
             <main className="min-h-screen flex flex-col items-center w-full max-w-full">
               <div className="flex-1 w-full flex flex-col gap-4 items-center">
