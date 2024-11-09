@@ -15,6 +15,8 @@ import { useEffect, useState } from "react";
 const ThemeSwitcher = () => {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+const { setColorScheme } = useMantineColorScheme();
+  const computedColorScheme = useComputedColorScheme('light', { getInitialValueInEffect: true });
 
   // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => {
@@ -55,7 +57,10 @@ const ThemeSwitcher = () => {
       <DropdownMenuContent className="w-content" align="start">
         <DropdownMenuRadioGroup
           value={theme}
-          onValueChange={(e) => setTheme(e)}
+          onValueChange={(e) => {
+setTheme(e)
+setColorScheme(e === 'system' ? 'auto' : e)
+}
         >
           <DropdownMenuRadioItem className="flex gap-2" value="light">
             <Sun size={ICON_SIZE} className="text-muted-foreground" />{" "}
