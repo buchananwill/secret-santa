@@ -1,14 +1,14 @@
-import { PrismaClient, Prisma, elf_mail } from "@prisma/client";
+import { elf_mail } from "@prisma/client";
 import { NextRequest } from "next/server";
 import { resend } from "@/api/actions/resend";
 import prismaClient from "@/api/prisma-client";
 
-const MAX_BATCH_SIZE = 10;
+const MAX_BATCH_SIZE = 2;
 const RETRY_DELAY = 5000; // 5 seconds for debounced retry
 
 export async function POST(request: NextRequest) {
   try {
-    console.log(JSON.stringify(request)); // KEEP LOG
+    console.log({ request: JSON.stringify(request), message: "notifying.." }); // KEEP LOG
     await handleNotifications(0);
     return new Response(null, { status: 201 });
   } catch (e) {
@@ -102,7 +102,7 @@ async function handleNotifications(retryCount = 0): Promise<void> {
     // Step 5: Retry if there were failures
     if (failureIds.length > 0) {
       console.log(`Retrying for failed messages in ${RETRY_DELAY}ms...`); // KEEP LOG
-      setTimeout(() => handleNotifications(retryCount + 1), RETRY_DELAY);
+      // setTimeout(() => handleNotifications(retryCount + 1), RETRY_DELAY);
     }
   } catch (error) {
     console.error("Error processing notifications:", error);
