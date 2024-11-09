@@ -4,17 +4,20 @@ import { SantaIcon } from "@/resources/santa-claus-svgrepo-com";
 import { IconArrowLeft, IconGift } from "@tabler/icons-react";
 import Link from "next/link";
 import { ConversationThread } from "@/components/elf-mail/ConversationThread";
+import { elf_profiles } from "@prisma/client";
 
 export default function ElfMailTabs({
   asElf,
   asSanta,
   userId,
   circleId,
+  elfProfileForSanta,
 }: {
   asSanta?: string;
   asElf?: string;
   userId?: string;
   circleId?: bigint;
+  elfProfileForSanta?: elf_profiles;
 }) {
   return (
     <>
@@ -33,13 +36,13 @@ export default function ElfMailTabs({
               value="santa"
               leftSection={<SantaIcon width={48} height={48} />}
             >
-              As Santa
+              You Are Santa
             </Tabs.Tab>
             <Tabs.Tab
               value="elf"
               leftSection={<IconGift height={48} width={48} strokeWidth={1} />}
             >
-              As Elf
+              You Are Elf
             </Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="santa">
@@ -47,6 +50,7 @@ export default function ElfMailTabs({
               recipient={asSanta}
               userId={userId}
               circleId={circleId}
+              stNickname={elfProfileForSanta?.st_nick_name}
             />
           </Tabs.Panel>
           <Tabs.Panel value="elf">

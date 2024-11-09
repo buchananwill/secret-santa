@@ -106,7 +106,7 @@ export async function fetchSantaIdForElf(id: bigint | null) {
   });
 }
 
-export async function fetchElfProfileFromSantaId(id: bigint | null) {
+export async function fetchElfProfileIdFromSantaId(id: bigint | null) {
   if (id === null) return null;
   return prismaClient.secret_santas.findUnique({
     where: {
@@ -115,6 +115,15 @@ export async function fetchElfProfileFromSantaId(id: bigint | null) {
     select: {
       id: true,
       user_id: true,
+    },
+  });
+}
+
+export async function fetchElfProfile(id: string) {
+  if (id === null) return null;
+  return prismaClient.elf_profiles.findUnique({
+    where: {
+      id: id,
     },
   });
 }

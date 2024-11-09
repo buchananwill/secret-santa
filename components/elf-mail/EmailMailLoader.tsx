@@ -1,6 +1,7 @@
 import { secret_santa_circles, secret_santas } from "@prisma/client";
 import {
-  fetchElfProfileFromSantaId,
+  fetchElfProfile,
+  fetchElfProfileIdFromSantaId,
   fetchSantaIdForElf,
 } from "@/app/elf-ville/secret-santa-circles/santa-circle-actions";
 import ElfMailTabs from "@/components/elf-mail/ElfMailTabs";
@@ -14,17 +15,23 @@ export default async function ElfMailLoader({
 }) {
   const [santaToThisElf, elfToThisSanta] = await Promise.all([
     fetchSantaIdForElf(secretSanta.id),
-    fetchElfProfileFromSantaId(secretSanta.acts_as_santa_to),
+    fetchElfProfileIdFromSantaId(secretSanta.acts_as_santa_to),
   ]);
 
   const santaId = santaToThisElf?.user_id;
   const elfId = elfToThisSanta?.user_id;
+
+  const elfProfile = elfId
+    ? ((await fetchElfProfile(elfId)) ?? undefined)
+    : undefined;
+
   return (
     <ElfMailTabs
       circleId={secretSantaCircle.id}
       asElf={santaId}
       userId={secretSanta.user_id}
       asSanta={elfId}
+      elfProfileForSanta={elfProfile}
     />
   );
 }

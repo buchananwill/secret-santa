@@ -1,7 +1,7 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import { fetchMailAction } from "@/api/fetch-mail-action";
-import { Paper, ScrollArea, Text } from "@mantine/core";
+import { Badge, Paper, ScrollArea, Text } from "@mantine/core";
 import { motion } from "framer-motion";
 import { NewMessage } from "@/components/elf-mail/NewMessage";
 
@@ -9,10 +9,12 @@ export function ConversationThread({
   userId,
   recipient,
   circleId,
+  stNickname,
 }: {
   userId: string;
   recipient: string;
   circleId?: bigint;
+  stNickname?: string;
 }) {
   let { data, isFetching, isLoading } = useQuery({
     queryKey: ["elf_mail", userId, recipient, circleId?.toString()],
@@ -28,6 +30,11 @@ export function ConversationThread({
         h={400}
       >
         <div className={"flex flex-col gap-1 h-fit w-96 p-4 "}>
+          <Paper className={"sticky w-full top-4 z-10 p-2 text-sm "}>
+            <span className={"font-light"}>Send to:</span>{" "}
+            {stNickname ?? "Secret Santa"}
+          </Paper>
+
           {messages.map((mail) => {
             const isSelf = mail.created_by === userId;
             return (
