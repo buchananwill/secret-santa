@@ -145,34 +145,50 @@ export async function tryToPerformMatching(circleId: bigint) {
         return nextSanta;
       });
       let santas = matchElvesToSantas(elvesList);
-      let userIdToSantaMap = secretSantasDb.reduce(
-        (prev, curr) => prev.set(curr.user_id, curr),
-        new Map<string, secret_santas>(),
-      );
-      const santasWithElfIds = santas
-        .flatMap((list) => [...list])
-        .map((santa) => {
-          let elf = userIdToSantaMap.get(santa.name);
-          let secretSanta = santa.actsAsSantaTo?.name
-            ? userIdToSantaMap.get(santa.actsAsSantaTo?.name)
-            : undefined;
-          if (!elf || !secretSanta)
-            throw Error("Santa or Elf not found in map");
-          return { ...secretSanta, acts_as_santa_to: elf.id };
+      if (!santas) {
+        await prismaClient.secret_santa_circles.update({
+          where: { id: circleId },
+          data: { ...circle, status: 1 },
         });
-      let updatePromises = santasWithElfIds.map((santa) => {
-        return prismaClient.secret_santas.update({
-          where: {
-            id: santa.id,
-          },
-          data: santa,
+        return new Response(
+          JSON.stringify({
+            status:
+              "Elves ready, but unable to match all elves without matching partners or cycles of length 2.",
+          }),
+          { status: 200 },
+        );
+      } else {
+        let userIdToSantaMap = secretSantasDb.reduce(
+          (prev, curr) => prev.set(curr.user_id, curr),
+          new Map<string, secret_santas>(),
+        );
+        const santasWithElfIds = santas
+          .flatMap((list) => [...list])
+          .map((santa) => {
+            let elf = userIdToSantaMap.get(santa.name);
+            let secretSanta = santa.actsAsSantaTo?.name
+              ? userIdToSantaMap.get(santa.actsAsSantaTo?.name)
+              : undefined;
+            if (!elf || !secretSanta)
+              throw Error("Santa or Elf not found in map");
+            return { ...secretSanta, acts_as_santa_to: elf.id };
+          });
+        let updatePromises = santasWithElfIds.map((santa) => {
+          return prismaClient.secret_santas.update({
+            where: {
+              id: santa.id,
+            },
+            data: santa,
+          });
         });
-      });
-      let updates = await Promise.all(updatePromises);
+        let updates = await Promise.all(updatePromises);
 
-      return new Response(JSON.stringify(updates.length), { status: 200 });
+        return new Response(JSON.stringify(updates.length), { status: 200 });
+      }
     } else {
-      return new Response(JSON.stringify({ isReady: false }), { status: 200 });
+      return new Response(JSON.stringify({ status: "Not all elves ready." }), {
+        status: 200,
+      });
     }
   });
 }

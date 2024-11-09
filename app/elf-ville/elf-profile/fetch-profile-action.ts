@@ -11,8 +11,20 @@ export async function fetchProfileAction() {
     });
   });
 }
+export async function findStNicknameById(elfProfileId: string) {
+  return withUser((user) => {
+    return prismaClient.elf_profiles.findUnique({
+      where: {
+        id: elfProfileId,
+      },
+      select: {
+        st_nick_name: true,
+      },
+    });
+  });
+}
 
-export async function findProfilesForPartner(stNickName: string) {
+export async function findProfilesByStNickname(stNickName: string) {
   return withUser((user) => {
     return prismaClient.elf_profiles.findMany({
       where: {

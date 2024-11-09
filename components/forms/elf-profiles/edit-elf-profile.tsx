@@ -22,6 +22,7 @@ export default function EditElfProfile({ profile }: { profile: elf_profiles }) {
         .from("elf_profiles")
         .update(data)
         .eq("id", profile.id);
+
       // TODO: handle response
       console.log(response);
     },
