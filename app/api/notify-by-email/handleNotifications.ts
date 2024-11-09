@@ -1,7 +1,7 @@
 "server only";
 import prismaClient from "@/api/prisma-client";
 import { elf_mail } from "@prisma/client";
-import { resend } from "@/api/actions/resend";
+import { resendElfMail } from "@/api/actions/resend";
 
 const MAX_BATCH_SIZE = 5;
 const RETRY_DELAY = 5000; // 5 seconds for debounced retry
@@ -58,7 +58,10 @@ export async function handleNotifications(retryCount = 0): Promise<void> {
 
       // Step 2: Send notifications
       const sendPromises = messages.map((message) =>
-        resend(message, userIdToEmailMap.get(message.recipient as string)),
+        resendElfMail(
+          message,
+          userIdToEmailMap.get(message.recipient as string),
+        ),
       );
 
       // Step 3: Await all promises and handle success/failure
