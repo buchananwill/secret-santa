@@ -18,7 +18,11 @@ export default function NavDrawer({
       >
         Elfville
       </Button>
-      <Drawer opened={opened} onClose={close}>
+      <Drawer
+        opened={opened}
+        onClose={close}
+        styles={{ content: { maxWidth: "75%" } }}
+      >
         {children}
       </Drawer>
     </>

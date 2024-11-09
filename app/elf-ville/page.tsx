@@ -15,9 +15,10 @@ export default function Page() {
   let summary = createSummary(elves);
 
   return (
-    <Card w={600}>
+    <Card className={"w-72 md:w-96 lg:w-[75vw]"}>
       <iframe
         style={{ borderRadius: "12px" }}
+        // className={"max-w-[60%]"}
         src="https://open.spotify.com/embed/album/5XmvYQG5vNDdAfeQiVVxqy?utm_source=generator"
         width="100%"
         height="152"

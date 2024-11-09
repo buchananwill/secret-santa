@@ -44,33 +44,27 @@ export default async function RootLayout({
         >
           <MantineProvider theme={theme}>
             <Notifications />
-            <main className="min-h-screen flex flex-col items-center">
+            <main className="min-h-screen flex flex-col items-center w-full max-w-full">
               <div className="flex-1 w-full flex flex-col gap-4 items-center">
-                <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-                  <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-                    <div className="flex gap-5 items-center font-semibold">
-                      <NavDrawer signedIn={!!user}>
-                        <LinkTree navNode={root} path={""} />
-                      </NavDrawer>
-                    </div>
-                    {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
-                  </div>
+                <nav className="w-full flex justify-around border-b border-b-foreground/10 h-16 sticky top-0 z-20 backdrop-blur items-center gap-2 max-w-full">
+                  <NavDrawer signedIn={!!user}>
+                    {user && (
+                      <div className={"truncate max-w-full pb-2 border-b"}>
+                        Hey, {user.email}!
+                      </div>
+                    )}
+                    <LinkTree navNode={root} path={""} />
+                  </NavDrawer>
+
+                  {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
                 </nav>
-                <div className="flex flex-col gap-2 max-w-5xl p-5">
+                <div className="flex flex-col gap-2 max-w-full md:max-w-5xl md:p-5">
                   {children}
                 </div>
 
-                <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
+                <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-4">
                   <p>
-                    Powered by{" "}
-                    <a
-                      href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-                      target="_blank"
-                      className="font-bold hover:underline"
-                      rel="noreferrer"
-                    >
-                      Supabase
-                    </a>
+                    Powered by <strong>Elves</strong>
                   </p>
                   <ThemeSwitcher />
                 </footer>
