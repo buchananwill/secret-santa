@@ -3,8 +3,6 @@ import { secret_santa_circles } from "@prisma/client";
 import { Badge, Button, Card } from "@mantine/core";
 import { SantaIcon } from "@/resources/santa-claus-svgrepo-com";
 import {
-  announceReady,
-  fetchCircleMembership,
   joinCircleAction,
   leaveCircleAction,
   userIsInCircle,
@@ -13,40 +11,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { IconLock, IconLockOpen } from "@tabler/icons-react";
 import { DateInput } from "@mantine/dates";
 import { motion } from "framer-motion";
-import { createClient } from "@/utils/supabase/client";
-
-function ReadyStatus({
-  santaCircle,
-  userIsInCircle,
-}: {
-  santaCircle: secret_santa_circles;
-  userIsInCircle: boolean;
-}) {
-  const client = createClient();
-  let queryClient = useQueryClient();
-  let queryKey = ["secret_santa", santaCircle.id.toString()];
-
-  const { data: secretSanta, isPending: userPending } = useQuery({
-    queryKey: queryKey,
-    queryFn: () => fetchCircleMembership(santaCircle.id),
-  });
-
-  return (
-    <Button
-      disabled={
-        !userIsInCircle ||
-        santaCircle.status.toString() !== "1" ||
-        secretSanta?.is_ready
-      }
-      onClick={async () => {
-        await announceReady(santaCircle.id);
-        queryClient.invalidateQueries({ queryKey });
-      }}
-    >
-      Ready!
-    </Button>
-  );
-}
+import { ReadyStatus } from "@/app/elf-ville/secret-santa-circles/ReadyStatus";
 
 export default function SecretSantaCircle({
   santaCircle,

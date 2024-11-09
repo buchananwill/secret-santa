@@ -104,6 +104,7 @@ export async function announceReady(circleId: bigint) {
 //TODO: run this with transactional lock
 export async function tryToPerformMatching(circleId: bigint) {
   return withUser(async (user) => {
+    console.log({ circleId, message: "trying to match" });
     let circle = await prismaClient.secret_santa_circles.findUnique({
       where: {
         id: circleId,
@@ -159,11 +160,17 @@ export async function tryToPerformMatching(circleId: bigint) {
             throw Error("Santa or Elf not found in map");
           return { ...secretSanta, acts_as_santa_to: elf.id };
         });
-      let batchPayload = await prismaClient.secret_santas.updateMany({
-        data: santasWithElfIds,
+      let updatePromises = santasWithElfIds.map((santa) => {
+        return prismaClient.secret_santas.update({
+          where: {
+            id: santa.id,
+          },
+          data: santa,
+        });
       });
-      console.log(batchPayload);
-      return new Response(null, { status: 200 });
+      let updates = await Promise.all(updatePromises);
+
+      return new Response(JSON.stringify(updates.length), { status: 200 });
     } else {
       return new Response(JSON.stringify({ isReady: false }), { status: 200 });
     }
