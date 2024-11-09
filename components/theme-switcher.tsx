@@ -11,6 +11,10 @@ import {
 import { Laptop, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import {
+  useComputedColorScheme,
+  useMantineColorScheme,
+} from '@mantine/core';
 
 const ThemeSwitcher = () => {
   const [mounted, setMounted] = useState(false);
