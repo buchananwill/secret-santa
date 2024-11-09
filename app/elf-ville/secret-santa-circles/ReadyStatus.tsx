@@ -46,7 +46,7 @@ export function ReadyStatus({
       onClick={onClick}
       loading={isPending}
     >
-      Ready! HELLO
+      Ready!
     </Button>
   );
 }
