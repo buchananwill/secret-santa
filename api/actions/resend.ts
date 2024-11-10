@@ -26,7 +26,7 @@ export async function resendNotification(
   message: { content: string; subject: string },
   recipientEmail?: string,
 ) {
-  if (!message || recipientEmail === undefined) {
+  if (message === null || recipientEmail === undefined) {
     throw Error("Missing recipient or message");
   }
   const resend = new Resend(process.env.RESEND_API_KEY_TEST_MESSAGES);
@@ -44,15 +44,13 @@ export async function informMatchedElves(santaCircle: number | bigint) {
       secret_santa_circle: santaCircle,
     },
   });
-  await Promise.all(
-    santasWithElfMatches
-      .map((secretSanta) => {
-        if (secretSanta.acts_as_santa_to) {
-          return notifyOfMatching(secretSanta, secretSanta.acts_as_santa_to);
-        } else {
-          return undefined;
-        }
-      })
-      .filter(isNotUndefined),
-  );
+  for (const secretSanta of santasWithElfMatches) {
+    console.log(`Processing ${secretSanta.id}`);
+    if (secretSanta.acts_as_santa_to !== null) {
+      console.log("Acts as santa to was not null, triggered notification.");
+      await notifyOfMatching(secretSanta, secretSanta.acts_as_santa_to);
+    } else {
+      console.log("Notification failed: acts_as_santa_to was null");
+    }
+  }
 }

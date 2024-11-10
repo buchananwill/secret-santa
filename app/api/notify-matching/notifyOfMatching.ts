@@ -8,10 +8,15 @@ function getSantaAnnouncement(santa: elf_profiles, elf: elf_profiles) {
 }
 
 export async function notifyOfMatching(
-  record: secret_santas,
+  santaRecord: secret_santas,
   elfId: number | bigint,
 ) {
-  const [elf, userProfile, santaProfile] = await Promise.all([
+  console.log(`Attempting to notify ${santaRecord.id}`);
+  // Get
+  // - the ELF for the secret_santa identity of the receiving elf.
+  // the USER PROFILE for the email address of the santa we are emailing,
+  // the ELF_PROFILE_OF_SANTA of the santa, so we can address them by their St Nickname
+  const [elf, userProfileOfSanta, elfProfileOfSanta] = await Promise.all([
     prismaClient.secret_santas.findUnique({
       where: {
         id: elfId,
@@ -19,30 +24,35 @@ export async function notifyOfMatching(
     }),
     prismaClient.users.findUnique({
       where: {
-        id: record.user_id,
+        id: santaRecord.user_id,
       },
     }),
     prismaClient.elf_profiles.findUnique({
       where: {
-        id: record.user_id,
+        id: santaRecord.user_id,
       },
     }),
   ]);
-  if (elf && userProfile) {
+  if (elf && userProfileOfSanta) {
+    console.log("Found elf and Santa user profile");
+    // now get the ELF PROFILE of the elf, so we can tell SANTA the elf's St Nickname.
     const elfProfile = await prismaClient.elf_profiles.findUnique({
       where: {
         id: elf.user_id,
       },
     });
 
-    if (elfProfile && santaProfile && userProfile?.email) {
+    if (elfProfile && elfProfileOfSanta && userProfileOfSanta?.email) {
+      console.log("sending match notification!");
       await resendNotification(
         {
-          content: getSantaAnnouncement(santaProfile, elfProfile),
+          content: getSantaAnnouncement(elfProfileOfSanta, elfProfile),
           subject: `You've been matched to an elf!`,
         },
-        userProfile.email,
+        userProfileOfSanta.email,
       );
     }
+  } else {
+    console.error("Missing profile data.");
   }
 }
