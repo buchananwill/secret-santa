@@ -85,9 +85,9 @@ export async function POST(request: NextRequest) {
         );
         nextResponse = new NextResponse(null, { status: 201 });
       } else if (record.is_ready === true && old_record.is_ready === false) {
-        tryToPerformMatching(record.secret_santa_circle).catch((e) =>
-          console.error(e),
-        );
+        tryToPerformMatching(record.secret_santa_circle)
+          .then((response) => console.log(response))
+          .catch((e) => console.error(e));
         nextResponse = new NextResponse(null, { status: 201 });
       } else {
         nextResponse = new NextResponse(null, { status: 200 });
