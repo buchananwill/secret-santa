@@ -88,7 +88,10 @@ export async function POST(request: NextRequest) {
         console.log("Matching triggered.");
         await tryToPerformMatching(record.secret_santa_circle)
           .then((response) => console.log(response))
-          .catch((e) => console.error(e));
+          .catch((e) => {
+            console.error(record);
+            console.error(e);
+          });
         nextResponse = new NextResponse(null, { status: 201 });
       } else {
         nextResponse = new NextResponse(null, { status: 200 });

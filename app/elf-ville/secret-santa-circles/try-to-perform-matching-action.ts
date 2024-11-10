@@ -11,8 +11,11 @@ export async function tryToPerformMatching(circleId: bigint) {
   };
 
   try {
-    prismaClient.$transaction(async (transaction) => {
+    await prismaClient.$transaction(async (transaction) => {
       console.log("Fetching secret_santa_circle with id:", circleId);
+      if (!circleId) {
+        throw Error(`No circleId provided. ${circleId}`);
+      }
       let circle = await transaction.secret_santa_circles.findUnique({
         where: {
           id: circleId,
@@ -24,10 +27,10 @@ export async function tryToPerformMatching(circleId: bigint) {
           message: "Could not find circle!",
           status: 400,
         };
-      } else if (circle.status > 1) {
-        console.log("Circle already closed. Cannot re-match.");
+      } else if (circle.status > 2) {
+        console.log("Circle already matched. Cannot re-match.");
         response = {
-          message: "Circle already closed. Cannot re-match.",
+          message: "Circle already matched. Cannot re-match.",
           status: 400,
         };
       } else {
@@ -138,7 +141,7 @@ export async function tryToPerformMatching(circleId: bigint) {
       }
     });
   } catch (e) {
-    console.error("An error occurred:", e);
+    // console.error("An error occurred:", e);
     response.message = `${response.message} - ${String(e)}`;
   }
 
