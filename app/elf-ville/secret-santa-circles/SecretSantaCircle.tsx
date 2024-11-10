@@ -75,7 +75,7 @@ export default function SecretSantaCircle({
         <DateInput
           value={santaCircle.delivery_day}
           disabled
-          styles={{ input: { color: "black" } }}
+          styles={{ input: { color: "var(--foreground)" } }}
         />
       </div>
       <ReadyStatus santaCircle={santaCircle} userIsInCircle={data ?? false} />
