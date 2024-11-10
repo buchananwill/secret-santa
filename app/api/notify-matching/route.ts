@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
         record.acts_as_santa_to !== null &&
         old_record.acts_as_santa_to === null
       ) {
-        notifyOfMatching(record, record.acts_as_santa_to).catch((e) =>
+        await notifyOfMatching(record, record.acts_as_santa_to).catch((e) =>
           console.error(e),
         );
         nextResponse = new NextResponse(null, { status: 201 });
