@@ -28,14 +28,16 @@ export function ReadyStatus({
 
   const onClick = useCallback(() => {
     startTransition(async () => {
-      let prismaSecretSantasClient = await announceReady(santaCircle.id);
+      let prismaSecretSantasClient = await announceReady(santaCircle.id).catch(
+        console.error,
+      );
       await queryClient.invalidateQueries({ queryKey });
-      let { message, status } = await tryToPerformMatching(santaCircle.id);
-      notifications.show({
-        message,
-        id: "matching-outcome",
-        color: getStatusColor(status),
-      });
+      // let { message, status } = await tryToPerformMatching(santaCircle.id);
+      // notifications.show({
+      //   message,
+      //   id: "matching-outcome",
+      //   color: getStatusColor(status),
+      // });
     });
   }, [santaCircle.id, startTransition, queryClient, queryKey]);
 
