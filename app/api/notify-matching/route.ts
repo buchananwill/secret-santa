@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
         nextResponse = new NextResponse(null, { status: 201 });
       } else if (record.is_ready && !old_record.is_ready) {
         console.log("Matching triggered.");
-        tryToPerformMatching(record.secret_santa_circle)
+        await tryToPerformMatching(record.secret_santa_circle)
           .then((response) => console.log(response))
           .catch((e) => console.error(e));
         nextResponse = new NextResponse(null, { status: 201 });
