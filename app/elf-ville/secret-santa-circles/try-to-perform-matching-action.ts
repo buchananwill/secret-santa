@@ -132,7 +132,18 @@ export async function tryToPerformMatching(circleId: bigint) {
                 data: santa,
               });
             });
-            let updates = await Promise.all(updatePromises);
+            const updateCircleStatus = transaction.secret_santa_circles.update({
+              where: {
+                id: circleId,
+              },
+              data: {
+                status: 3,
+              },
+            });
+            let updates = await Promise.all([
+              ...updatePromises,
+              updateCircleStatus,
+            ]);
             console.log("Update promises resolved:", updates);
 
             response = { message: "Matching successful!", status: 201 };

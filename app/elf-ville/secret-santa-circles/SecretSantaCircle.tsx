@@ -80,7 +80,10 @@ export default function SecretSantaCircle({
         />
       </div>
       <ReadyStatus santaCircle={santaCircle} userIsInCircle={data ?? false} />
-      <Button onClick={() => tryToPerformMatching(santaCircle.id)}>
+      <Button
+        onClick={() => tryToPerformMatching(santaCircle.id)}
+        disabled={santaCircle.status >= 2}
+      >
         MATCH
       </Button>
     </Card>
