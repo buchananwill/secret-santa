@@ -12,6 +12,7 @@ import { IconLock, IconLockOpen } from "@tabler/icons-react";
 import { DateInput } from "@mantine/dates";
 import { motion } from "framer-motion";
 import { ReadyStatus } from "@/app/elf-ville/secret-santa-circles/ReadyStatus";
+import { tryToPerformMatching } from "@/app/elf-ville/secret-santa-circles/try-to-perform-matching-action";
 
 export default function SecretSantaCircle({
   santaCircle,
@@ -79,6 +80,9 @@ export default function SecretSantaCircle({
         />
       </div>
       <ReadyStatus santaCircle={santaCircle} userIsInCircle={data ?? false} />
+      <Button onClick={() => tryToPerformMatching(santaCircle.id)}>
+        MATCH
+      </Button>
     </Card>
   );
 }
