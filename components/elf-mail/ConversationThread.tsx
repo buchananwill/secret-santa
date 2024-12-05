@@ -8,9 +8,11 @@ import {
   Paper,
   ScrollArea,
   Text,
+  useComputedColorScheme,
 } from "@mantine/core";
 import { motion } from "framer-motion";
 import { NewMessage } from "@/components/elf-mail/NewMessage";
+import { useColorScheme } from "@mantine/hooks";
 
 export function ConversationThread({
   userId,
@@ -27,6 +29,18 @@ export function ConversationThread({
     queryKey: ["elf_mail", userId, recipient, circleId?.toString()],
     queryFn: () => fetchMailAction(recipient, circleId ? circleId : undefined),
   });
+
+  const colorScheme = useComputedColorScheme();
+  const selfColor =
+    colorScheme === "light"
+      ? "var(--mantine-color-green-1)"
+      : "var(--mantine-color-green-9)";
+  const correspondentColor =
+    colorScheme === "light"
+      ? "var(--mantine-color-white)"
+      : "var(--mantine-color-black)";
+
+  console.log({ colorScheme, selfColor, correspondentColor });
 
   const messages = data ? data : [];
 
@@ -61,10 +75,7 @@ export function ConversationThread({
                     borderRadius: isSelf
                       ? "16px 0px 16px 16px"
                       : "0px 16px 16px 16px",
-                    backgroundColor:
-                      mail.created_by === userId
-                        ? "var(--mantine-color-green-1)"
-                        : "var(--mantine-color-white)",
+                    backgroundColor: isSelf ? selfColor : correspondentColor,
                   },
                 }}
               >
@@ -78,11 +89,10 @@ export function ConversationThread({
                     // transform: isSelf ? "rotate(135deg)" : "rotate(-45deg)", // Rotate based on side
                     width: "10px",
                     height: "10px",
-                    backgroundColor:
-                      mail.created_by === userId
-                        ? "var(--mantine-color-green-1)"
-                        : "var(--mantine-color-white)",
-                    borderRadius: "4px",
+                    backgroundColor: isSelf ? selfColor : correspondentColor,
+                    borderRadius: isSelf
+                      ? "0px 4px 4px 0px"
+                      : "4px 0px 0px 4px",
                     clipPath: isSelf
                       ? "polygon(0 0, 100% 0, 0 100%)"
                       : "polygon(100% 100%, 100% 0, 0 0)", // Create triangle shape

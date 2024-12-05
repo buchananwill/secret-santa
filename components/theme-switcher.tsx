@@ -11,16 +11,15 @@ import {
 import { Laptop, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import {
-  useComputedColorScheme,
-  useMantineColorScheme,
-} from '@mantine/core';
+import { useComputedColorScheme, useMantineColorScheme } from "@mantine/core";
 
 const ThemeSwitcher = () => {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
-const { setColorScheme } = useMantineColorScheme();
-  const computedColorScheme = useComputedColorScheme('light', { getInitialValueInEffect: true });
+  const { setColorScheme } = useMantineColorScheme();
+  const computedColorScheme = useComputedColorScheme("light", {
+    getInitialValueInEffect: true,
+  });
 
   // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => {
@@ -62,9 +61,12 @@ const { setColorScheme } = useMantineColorScheme();
         <DropdownMenuRadioGroup
           value={theme}
           onValueChange={(e) => {
-setTheme(e)
-setColorScheme(e === 'light' ? 'light' : e === 'dark' ? 'dark' : 'auto')
-}}
+            console.log({ e });
+            setTheme(e);
+            setColorScheme(
+              e === "light" ? "light" : e === "dark" ? "dark" : "auto",
+            );
+          }}
         >
           <DropdownMenuRadioItem className="flex gap-2" value="light">
             <Sun size={ICON_SIZE} className="text-muted-foreground" />{" "}
