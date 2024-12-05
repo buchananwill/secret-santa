@@ -1,5 +1,5 @@
 "use client";
-import { Button, Tabs } from "@mantine/core";
+import { Button, Tabs, useComputedColorScheme } from "@mantine/core";
 import { SantaIcon } from "@/resources/santa-claus-svgrepo-com";
 import { IconArrowLeft, IconGift } from "@tabler/icons-react";
 import Link from "next/link";
@@ -19,6 +19,7 @@ export default function ElfMailTabs({
   circleId?: bigint;
   elfProfileForSanta?: elf_profiles;
 }) {
+  const colorScheme = useComputedColorScheme();
   return (
     <>
       <Button
@@ -34,7 +35,18 @@ export default function ElfMailTabs({
           <Tabs.List>
             <Tabs.Tab
               value="santa"
-              leftSection={<SantaIcon width={48} height={48} />}
+              leftSection={
+                <SantaIcon
+                  width={48}
+                  height={48}
+                  style={{
+                    fill:
+                      colorScheme === "light"
+                        ? "var(--mantine-color-black)"
+                        : "var(--mantine-color-white)",
+                  }}
+                />
+              }
             >
               You Are Santa
             </Tabs.Tab>
