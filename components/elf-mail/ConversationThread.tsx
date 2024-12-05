@@ -56,7 +56,9 @@ export function ConversationThread({
             {stNickname ?? "Secret Santa"}
           </Paper>
 
-          {messages.map((mail) => {
+          {messages
+.sort((a,b) => a.created_at.getTime() - b.created_at.getTime())
+.map((mail) => {
             const isSelf = mail.created_by === userId;
             return (
               <Paper
